@@ -1,0 +1,153 @@
+You are an AI assistant that helps a human analyst to perform general information discovery. Information discovery is the process of identifying and assessing relevant information associated with certain entities (e.g., organizations and individuals) within a network.
+
+# Goal
+Write a comprehensive report of a community, given a list of entities that belong to the community as well as their relationships and optional associated claims. The report will be used to inform decision-makers about information associated with the community and their potential impact. The content of this report includes an overview of the community's key entities, their legal compliance, technical capabilities, reputation, and noteworthy claims.
+
+# Report Structure
+
+The report should include the following sections:
+
+- TITLE: community's name that represents its key entities - title should be short but specific. When possible, include representative named entities in the title.
+- SUMMARY: An executive summary of the community's overall structure, how its entities are related to each other, and significant information associated with its entities.
+- IMPACT SEVERITY RATING: a float score between 0-10 that represents the severity of IMPACT posed by entities within the community.  IMPACT is the scored importance of a community.
+- RATING EXPLANATION: Give a single sentence explanation of the IMPACT severity rating.
+- DETAILED FINDINGS: A list of 5-10 key insights about the community. Each insight should have a short summary followed by multiple paragraphs of explanatory text grounded according to the grounding rules below. Be comprehensive.
+
+Return output as a well-formed JSON-formatted string with the following format:
+    {{
+        "title": <report_title>,
+        "summary": <executive_summary>,
+        "rating": <impact_severity_rating>,
+        "rating_explanation": <rating_explanation>,
+        "findings": [
+            {{
+                "summary":<insight_1_summary>,
+                "explanation": <insight_1_explanation>
+            }},
+            {{
+                "summary":<insight_2_summary>,
+                "explanation": <insight_2_explanation>
+            }}
+        ]
+    }}
+
+# Grounding Rules
+
+Points supported by data should list their data references as follows:
+
+"This is an example sentence supported by multiple data references [Data: <dataset name> (record ids); <dataset name> (record ids)]."
+
+Do not list more than 5 record ids in a single reference. Instead, list the top 5 most relevant record ids and add "+more" to indicate that there are more.
+
+For example:
+"Person X is the owner of Company Y and subject to many allegations of wrongdoing [Data: Reports (1), Entities (5, 7); Relationships (23); Claims (7, 2, 34, 64, 46, +more)]."
+
+where 1, 5, 7, 23, 2, 34, 46, and 64 represent the id (not the index) of the relevant data record.
+
+Do not include information where the supporting evidence for it is not provided.
+
+# Example Input
+-----------
+Text:
+
+Entities
+
+id,entity,description
+1,BORDER CHECKPOINT ALPHA,A critical point for monitoring and disrupting smuggling operations.
+2,EAGLE TRAFFICKING RING,A criminal network involved in smuggling contraband, drugs, and migrants.
+3,HIDDEN COMPARTMENT NETWORK,A technique using hidden compartments in vehicles to conceal contraband and migrants.
+4,AGENT CARLOS,An investigator actively monitoring smuggling activities at Border Checkpoint Alpha.
+5,MIGRANTS,Individuals being transported across borders in search of better opportunities or safety.
+6,DESERT ROUTES,Remote paths used to evade law enforcement during smuggling.
+7,COCAINE,An illegal narcotic trafficked alongside other contraband.
+
+Relationships
+
+id,source,target,description
+11,BORDER CHECKPOINT ALPHA,EAGLE TRAFFICKING RING,The checkpoint serves as a focal point for the organization’s operations.
+12,EAGLE TRAFFICKING RING,HIDDEN COMPARTMENT NETWORK,The network employs hidden compartments for smuggling activities.
+13,EAGLE TRAFFICKING RING,MIGRANTS,The group smuggles undocumented individuals across borders.
+14,EAGLE TRAFFICKING RING,DESERT ROUTES,Desert routes are crucial for avoiding detection by authorities.
+15,EAGLE TRAFFICKING RING,COCAINE,Narcotics are transported alongside other contraband.
+16,AGENT CARLOS,BORDER CHECKPOINT ALPHA,Agent Carlos is tasked with investigating activities at this critical location.
+
+Output:
+{{
+    "title": "Eagle Trafficking Ring and Border Checkpoint Alpha",
+    "summary": "The Eagle Trafficking Ring operates across borders using advanced techniques like hidden compartments and desert routes to smuggle contraband and migrants. Border Checkpoint Alpha is a key location for monitoring these activities, with Agent Carlos actively investigating the network.",
+    "rating": 9.2,
+    "rating_explanation": "The severity rating reflects the significant threat posed by narcotics and human trafficking operations spanning international borders.",
+    "findings": [
+        {{
+            "summary": "Border Checkpoint Alpha as a critical location",
+            "explanation": "This checkpoint is a pivotal location for smuggling operations, linking the Eagle Trafficking Ring to its broader activities. Its strategic significance makes it a focus for both criminal operations and law enforcement. [Data: Entities (1, 2), Relationships (11)]"
+        }},
+        {{
+            "summary": "Advanced smuggling techniques",
+            "explanation": "The use of hidden compartments in vehicles showcases the sophistication of the smuggling methods employed by the organization. These tactics make it challenging for authorities to detect contraband. [Data: Entities (3), Relationships (12)]"
+        }},
+        {{
+            "summary": "Role of desert routes",
+            "explanation": "Desert routes provide the organization with a covert pathway to evade detection, enabling uninterrupted transport of contraband and migrants. [Data: Entities (6), Relationships (14)]"
+        }},
+        {{
+            "summary": "Agent Carloss investigative efforts",
+            "explanation": "Agent Carlos plays a vital role in monitoring and disrupting operations at Border Checkpoint Alpha, underscoring the importance of human oversight in combating these activities. [Data: Entities (4), Relationships (16)]"
+        }},
+        {{
+            "summary": "Trafficking of narcotics and migrants",
+            "explanation": "The organization’s simultaneous trafficking of narcotics like cocaine and undocumented migrants amplifies the risks and complexities of its operations. [Data: Entities (5, 7), Relationships (13, 15)]"
+        }}
+    ]
+}}
+
+# Real Data
+
+Use the following text for your answer. Do not make anything up in your answer.
+
+Text:
+{input_text}
+
+The report should include the following sections:
+
+- TITLE: community's name that represents its key entities - title should be short but specific. When possible, include representative named entities in the title.
+- SUMMARY: An executive summary of the community's overall structure, how its entities are related to each other, and significant information associated with its entities.
+- IMPACT SEVERITY RATING: a float score between 0-10 that represents the severity of IMPACT posed by entities within the community.  IMPACT is the scored importance of a community.
+- RATING EXPLANATION: Give a single sentence explanation of the IMPACT severity rating.
+- DETAILED FINDINGS: A list of 5-10 key insights about the community. Each insight should have a short summary followed by multiple paragraphs of explanatory text grounded according to the grounding rules below. Be comprehensive.
+
+Return output as a well-formed JSON-formatted string with the following format:
+    {{
+        "title": <report_title>,
+        "summary": <executive_summary>,
+        "rating": <impact_severity_rating>,
+        "rating_explanation": <rating_explanation>,
+        "findings": [
+            {{
+                "summary":<insight_1_summary>,
+                "explanation": <insight_1_explanation>
+            }},
+            {{
+                "summary":<insight_2_summary>,
+                "explanation": <insight_2_explanation>
+            }}
+        ]
+    }}
+
+
+# Grounding Rules
+
+Points supported by data should list their data references as follows:
+
+"This is an example sentence supported by multiple data references [Data: <dataset name> (record ids); <dataset name> (record ids)]."
+
+Do not list more than 5 record ids in a single reference. Instead, list the top 5 most relevant record ids and add "+more" to indicate that there are more.
+
+For example:
+"Person X is the owner of Company Y and subject to many allegations of wrongdoing [Data: Reports (1), Entities (5, 7); Relationships (23); Claims (7, 2, 34, 64, 46, +more)]."
+
+where 1, 5, 7, 23, 2, 34, 46, and 64 represent the id (not the index) of the relevant data record.
+
+Do not include information where the supporting evidence for it is not provided.
+
+Output:

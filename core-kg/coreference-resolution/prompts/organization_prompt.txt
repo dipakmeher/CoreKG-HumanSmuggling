@@ -1,0 +1,92 @@
+- Goal -
+You are a highly precise and intelligent coreference resolution system designed to support named entity recognition (NER) and knowledge graph construction. Your task is to resolve all coreferences related to the "Organization" entity type in a given legal or investigative text by standardizing and unifying all variations of organization mentions. 
+
+You must preserve the original structure and wording of the text. Do not summarize, paraphrase, reword, or skip any content. Do not add explanations, comments, or disclaimers — even if no changes are made. Return only the full, unaltered input text with applicable organization-related coreference resolutions applied.
+
+This is an unsupervised coreference resolution task. The rules below are intended to guide you in resolving organization-related references. While examples are provided, they do not cover all scenarios — you must infer and apply resolution logic using contextual understanding.
+
+- Coreference Resolution Rules – Organization Entity Type -
+
+1. Full Name Consistency
+   - Once an organization is introduced with its full official name (e.g., Jamco International, Inc.), all later mentions — including abbreviations (e.g., Jamco), shortened forms (e.g., the company, the firm), or vague references (e.g., it) — must be resolved to the full name.
+
+2. Remove Role Descriptors
+   - Replace phrases like "the carrier", "the broker", "the shipping company" with the full organization name, if contextually referring to a previously introduced organization.
+
+3. Acronyms and Abbreviations
+   - If an acronym (e.g., ICE) follows a full mention (e.g., Immigration and Customs Enforcement), resolve all subsequent uses of the acronym to the full name.
+     Example: "ICE" : "Immigration and Customs Enforcement"
+
+4. Generic References
+   - Resolve generic references like "the agency", "the corporation", "the business", or "they" only if context clearly links them to a known organization.
+
+5. Multiple Organizations
+   - When multiple organizations are introduced, resolve generic references like "the company" to the most recently mentioned organization, unless context specifies otherwise.
+
+6. Hyphenated or Embedded Mentions
+   - If an organization name appears in a compound (e.g., Jamco-owned lot), resolve the root name to its full form, preserving the compound structure.
+     Example: "Jamco-owned lot" : "Jamco International, Inc.-owned lot"
+
+7. Avoid Over-resolution
+   - Leave vague or ambiguous references unchanged unless context clearly links them to a known organization.
+
+8. Maintain Original Mentions
+   - Keep the first mention of any organization exactly as written. Resolution applies only to subsequent references.
+
+9. Legal Institutions and Government Bodies
+   - Resolve mentions like "court", "district court", "homeland security" to the full institution name only if the full name (e.g., "United States District Court for the Southern District of Texas", "U.S. Department of Homeland Security") appears earlier in the text.
+   - If no full name was introduced, leave the reference unchanged.
+
+####################
+=== EXAMPLES FOR LEARNING: ORGANIZATION COREFERENCE RESOLUTION ===
+####################
+
+Example 01
+Input_text:
+Jamco International, Inc. owns the Auburn Road lot. The lot was previously used by Jamco for trailer storage. Later, the company reported a security breach.
+
+Output:
+Jamco International, Inc. owns the Auburn Road lot. The lot was previously used by Jamco International, Inc. for trailer storage. Later, Jamco International, Inc. reported a security breach.
+
+--------------------
+
+Example 02
+Input_text:
+A representative from Immigration and Customs Enforcement (ICE) conducted the interview. ICE later submitted a report. The agency has been involved in similar cases.
+
+Output:
+A representative from Immigration and Customs Enforcement conducted the interview. Immigration and Customs Enforcement later submitted a report. Immigration and Customs Enforcement has been involved in similar cases.
+
+--------------------
+
+Example 03
+Input_text:
+USA Trucking was listed as the carrier on the forged BOL. The carrier later confirmed that it had no shipments in Texas during that week. The trucking company’s records support this claim.
+
+Output:
+USA Trucking was listed as the carrier on the forged BOL. USA Trucking later confirmed that it had no shipments in Texas during that week. USA Trucking’s records support this claim.
+
+--------------------
+
+Example 04
+Input_text:
+The United States Court of Appeals for the Fifth Circuit issued a ruling. The court emphasized the importance of procedural compliance. The district court's decision was reversed.
+
+Output:
+The United States Court of Appeals for the Fifth Circuit issued a ruling. The United States Court of Appeals for the Fifth Circuit emphasized the importance of procedural compliance. The United States District Court for the Southern District of Texas's decision was reversed.
+
+####################
+=== INPUT TEXT ===
+You will now be given a long document for which you must resolve all coreferences related to the Organization entity type only.
+
+Read and process every sentence. Apply the above rules thoroughly and consistently. If no organization-related coreferences exist, return the input exactly as received — without skipping, trimming, or modifying any part.
+
+Do not include any extra output such as "no changes were needed" or "no coreferences found". Return only the final resolved text, preserving the original paragraph and sentence structure.
+
+####################
+Input_text:
+
+{input_text}
+
+####################
+Output:

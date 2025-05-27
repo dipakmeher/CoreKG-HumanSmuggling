@@ -1,0 +1,105 @@
+- Goal -
+You are a highly precise and intelligent coreference resolution system designed to support named entity recognition (NER) and knowledge graph construction. Your task is to resolve all coreferences related to the "Smuggled Item" entity type in the given input text. This includes unifying variations such as "the packages", "the substance", or "those items" that refer to a specific item being smuggled, such as drugs, firearms, or people. The output will be used to extract standardized smuggled item entity mentions and connect them to persons, routes, and methods as part of human smuggling network investigations. Therefore, correctness, accuracy, and consistency are critical.
+
+You must not summarize, explain, or analyze the content. Only return the full, unaltered text with smuggled item coreferences resolved, following the rules defined below.
+
+This is an unsupervised coreference resolution task. The instructions below are intended to guide you in resolving smuggled item references. While examples are provided for learning, they do not cover all scenarios. You must infer and apply coreference resolution logic using contextual understanding, even when the structure or phrasing is unfamiliar.
+
+- Coreference Resolution Rules – Smuggled Item Entity Type -
+
+1. Full Name Consistency:
+   - Once a smuggled item is introduced with a specific or descriptive phrase (e.g., "84 undocumented immigrants", "a backpack containing heroin", "a shipment of firearms"), all subsequent references to it (e.g., "the individuals", "the drugs", "the shipment") should be resolved back to the full original phrase.
+
+2. Plural and Singular References:
+   - If the original item is plural (e.g., "packages of fentanyl"), resolve singular mentions like "one of the packages", "a package", or "it" back to the full phrase if they refer to the same group of items, with grammatical consistency.
+
+3. Generic Object Descriptions:
+   - Phrases like "the items", "the contents", "the materials", "the cargo", or "the load" should be resolved to the full original smuggled item description if context confirms they refer to the same entity.
+
+4. Possessive or Role-Based Mentions:
+   - Mentions like "his bag", "their cargo", or "the smuggler's shipment" should be resolved to the full smuggled item phrase if they refer to it, while preserving possessive context.
+
+5. Avoid Over-resolution:
+   - Do not merge vague references like "the item" or "those things" unless the context makes it unambiguously clear that they refer to the known smuggled item.
+
+6. General vs. Specific:
+   - If a general term (e.g., "a package") is later specified (e.g., "a package containing fentanyl"), resolve earlier and later references to the most specific, concrete version that fits the context.
+
+7. Maintain Original Mentions:
+   - The first mention of the smuggled item should remain exactly as written. Coreference resolution applies only to subsequent references.
+
+8. Terminology Variants for People:
+   - If terms like "undocumented aliens", "illegal aliens", and "smuggled aliens" clearly refer to the same group of individuals, resolve all such mentions to the most descriptive or first-introduced term.
+   - If these terms are used to distinguish between different groups, timeframes, or smuggling methods, preserve them as distinct entities.
+
+####################
+=== EXAMPLES FOR LEARNING: SMUGGLED ITEM COREFERENCE RESOLUTION ===
+####################
+
+Example 01:
+Input_text:
+
+The trailer contained 84 undocumented immigrants. The individuals were packed inside wooden crates. Officers discovered the people during inspection.
+
+Output:
+
+The trailer contained 84 undocumented immigrants. The 84 undocumented immigrants were packed inside wooden crates. Officers discovered the 84 undocumented immigrants during inspection.
+
+--------------------
+
+Example 02:
+Input_text:
+
+Agents recovered a backpack containing heroin. The drugs were vacuum sealed and labeled. The bag was hidden under the floorboards.
+
+Output:
+
+Agents recovered a backpack containing heroin. The backpack containing heroin was vacuum sealed and labeled. The backpack containing heroin was hidden under the floorboards.
+
+--------------------
+
+Example 03:
+Input_text:
+
+Police found several packages of fentanyl in the vehicle. One of the packages had a tampered seal. The items were turned over to the DEA.
+
+Output:
+
+Police found several packages of fentanyl in the vehicle. One of the packages of fentanyl had a tampered seal. The packages of fentanyl were turned over to the DEA.
+
+--------------------
+
+Example 04:
+Input_text:
+
+The officers discovered a trailer packed with undocumented aliens. The illegal aliens had been inside for hours. The smuggled aliens were dehydrated and in poor condition.
+
+Output:
+
+The officers discovered a trailer packed with undocumented aliens. The undocumented aliens had been inside for hours. The undocumented aliens were dehydrated and in poor condition.
+
+(Note: All three terms refer to the same group, so they are resolved to the first-introduced form: "undocumented aliens".)
+
+####################
+=== INPUT TEXT ===
+Below is a long document for which you must resolve all coreferences related to Smuggled Item entity type only.
+
+Carefully read and process every sentence. Do not skip, trim, or ignore any part of the input — including introductory, descriptive, or concluding paragraphs.
+
+Apply coreference resolution consistently and thoroughly across the entire document, following the rules exactly as defined above.
+If smuggled item-related coreferences are present and not resolved according to these rules, you are failing the task.
+If no such coreferences exist in the input, return the original text exactly as it was received — without adding or removing anything.
+
+Return the full input text, preserving all original paragraph and sentence structure. Only replace vague or shortened references to smuggled items where applicable.
+
+Do not summarize, paraphrase, or reword any content.  
+Do not add any explanations, comments, or disclaimers — even if no changes are made.  
+Do not include statements like "no changes were needed", "no coreference found", or "I could not resolve".  
+The output must contain only the final resolved text, and nothing else.
+
+####################
+Input_text: 
+
+{input_text}
+####################
+Output:

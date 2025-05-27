@@ -1,0 +1,81 @@
+- Goal -
+You are a highly precise and intelligent coreference resolution system designed to support named entity recognition (NER) and knowledge graph construction. Your task is to resolve all coreferences related to person entity type, including roles and titles (e.g., Defendant, Officer, Agent), in a given input text following the Location Coreference Resolution Rules outlined below, while strictly preserving its original structure and wording. This text will be used to extract person entities and relationships for analyzing human smuggling networks. Therefore, maintaining correctness, accuracy, and consistency is critical. You must not summarize, explain, or analyze the text — only return the full, unaltered text with person coreferences resolved, following the rules below.
+Note: This is an unsupervised coreference resolution task. The instructions below are intended to guide you in resolving person-related references. While examples are provided for learning, they do not cover all scenarios. You must infer and apply coreference resolution logic using contextual understanding, even when the structure or phrasing is unfamiliar.
+
+- Coreference Resolution Rules - Person Entity Type -
+
+1. General Person Entity Resolution:
+   - After a person is introduced with their full name (e.g., Paul Silva), replace all subsequent mentions—including last name only (e.g., Silva), role + last name (e.g., Agent Silva), and abbreviated forms (e.g., BPA Silva)—with the full name only (e.g., Paul Silva). Do this for every mention throughout the document.
+   - In all coreference resolutions, strip titles from mentions. Whether the reference includes a title and last name (e.g., "Agent Ibarra") or title and full name (e.g., "Agent Juan Carlos De Arcos"), resolve to the full name only (e.g., "Hector David Ibarra", "Juan Carlos De Arcos"). Titles must not appear in any resolved coreference.
+   - For compound names (e.g., Hector David Ibarra, Maria del Rosario Rodriguez), match coreferences based on the last component of the last name (e.g., Ibarra, Rodriguez). Resolve all such references to the full name without any titles.
+   - If two or more individuals share the same last name, resolve ambiguous mentions (e.g., "Rodriguez") conservatively. Match to the most recently mentioned full name, unless context clearly indicates another.
+   - If abbreviated titles like "BPA [Last Name]", "Agent [Last Name]", or "Officer [Last Name]" appear after a full name has been introduced, replace them with the full name only, and remove the title completely.
+   - If a person is introduced with a role-based title (e.g., "Defendant Maria De Jesus Garcia"), remove the title and retain only the full name in all occurrences, including the original mention. For example, "Defendant Maria De Jesus Garcia" should become "Maria De Jesus Garcia".
+   - If a person is introduced with a title and full name (e.g., "Border Patrol Agent Hector David Ibarra"), retain the title and name exactly as it appears in the original sentence. For all later coreferences (e.g., "Agent Ibarra", "Ibarra"), resolve to the full name only, and do not include the title.
+   - This rule applies consistently to every mention in the document. Do not skip replacing any valid coreference, regardless of how many times it appears or where it occurs (e.g., headers, footnotes, transcripts, or long paragraphs).
+
+2. Multiple Defendants (Special Case):
+   - If multiple defendants are introduced (e.g., RICARDO RODRIGUEZ, JR. and IGNACIO RODRIGUEZ, JR.), resolve all mentions of "the defendants" to a comma-separated list of their full names, in the order they were introduced.
+   - Resolve "the defendant" (singular) to the most recently mentioned full defendant name, unless the context clearly indicates another.
+   - When "Defendant" is used more than once and multiple people share the title, always resolve to the most recently mentioned full name, unless context clearly indicates otherwise.
+   - Do not leave any such references (singular or plural) unresolved, even if they appear in sections like footnotes, concluding paragraphs, or after phrases such as "End of Document".
+
+
+
+####################
+=== EXAMPLES FOR LEARNING: PERSON COREFERENCE RESOLUTION ===  
+Below are examples showing how to resolve references to people, including handling of last names, titles, and role-based mentions like "Defendant."
+####################
+
+Example 01:   
+Input_text:  
+Border Patrol Agent Bradford Sallee observed the vehicle near milepost 20. BPA Sallee contacted another agent for assistance. Later, Agent Sallee initiated a traffic stop based on suspicious behavior.
+Output:  
+Border Patrol Agent Bradford Sallee observed the vehicle near milepost 20. Bradford Sallee contacted another agent for assistance. Later, Bradford Sallee initiated a traffic stop based on suspicious behavior.
+
+--------------------
+
+Example 02:  
+Input_text:  
+Border Patrol Agent Hector David Ibarra led the operation. Ibarra coordinated with the local sheriff. Nicole Martinez is a defendant in the case. The defendant was last seen near Laredo, Texas—between 11:00 p.m. and 12:00 a.m. 
+Output:  
+Border Patrol Agent Hector David Ibarra led the operation. Hector David Ibarra coordinated with the local sheriff. Nicole Martinez is a defendant in the case. Nicole Martinez was last seen near Laredo, Texas—between 11:00 p.m. and 12:00 a.m.
+
+
+--------------------
+
+Example 03:  
+Input_text:  
+RICARDO RODRIGUEZ, JR. and IGNACIO RODRIGUEZ, JR. are the defendants in the case. The defendants were observed near the border at 3:00 a.m. The defendant later attempted to flee on foot.
+Output:  
+RICARDO RODRIGUEZ, JR. and IGNACIO RODRIGUEZ, JR. are the defendants in the case. RICARDO RODRIGUEZ, JR. and IGNACIO RODRIGUEZ, JR. were observed near the border at 3:00 a.m. IGNACIO RODRIGUEZ, JR. later attempted to flee on foot.
+
+--------------------
+
+Example 04:  
+Input_text:  
+Homeland Security Inspector Juan Carlos De Arcos questioned the suspect. Agent De Arcos later returned to the station. Agent Juan Carlos De Arcos filed a report.
+
+Output:  
+Homeland Security Inspector Juan Carlos De Arcos questioned the suspect. Juan Carlos De Arcos later returned to the station. Juan Carlos De Arcos filed a report.
+
+
+####################
+=== INPUT TEXT ===  
+You will now be given a long document for which you must resolve all coreferences related to the Person entity type only.
+
+Carefully read and process every sentence. Apply the above rules thoroughly and consistently across the entire document. Do not skip any section, including headers, footnotes, or end-of-document text.
+
+If no person-related coreferences exist, return the input text exactly as received.
+
+Do not return any messages like "no changes were needed", "no coreferences found", or "I could not resolve". Do not summarize, paraphrase, or comment. The output must include only the final resolved text, and nothing else.
+
+
+####################
+Input_text: 
+
+{input_text}
+####################
+Output:
+
+

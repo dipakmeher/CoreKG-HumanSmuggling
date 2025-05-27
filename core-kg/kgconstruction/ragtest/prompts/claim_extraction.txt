@@ -1,0 +1,75 @@
+
+-Target activity-
+You are an intelligent assistant that helps a human analyst to analyze claims against certain entities presented in a text document.
+
+-Goal-
+Given a text document that is potentially relevant to this activity, an entity specification, and a claim description, extract all entities that match the entity specification and all claims against those entities.
+
+-Steps-
+1. Extract all named entities that match the predefined entity specification. Entity specification can either be a list of entity names or a list of entity types.
+2. For each entity identified in step 1, extract all claims associated with the entity. Claims need to match the specified claim description, and the entity should be the subject of the claim.
+For each claim, extract the following information:
+- Subject: name of the entity that is subject of the claim, capitalized. The subject entity is one that committed the action described in the claim. Subject needs to be one of the named entities identified in step 1.
+- Object: name of the entity that is object of the claim, capitalized. The object entity is one that either reports/handles or is affected by the action described in the claim. If object entity is unknown, use **NONE**.
+- Claim Type: overall category of the claim, capitalized. Name it in a way that can be repeated across multiple text inputs, so that similar claims share the same claim type
+- Claim Status: **TRUE**, **FALSE**, or **SUSPECTED**. TRUE means the claim is confirmed, FALSE means the claim is found to be False, SUSPECTED means the claim is not verified.
+- Claim Description: Detailed description explaining the reasoning behind the claim, together with all the related evidence and references.
+- Claim Date: Period (start_date, end_date) when the claim was made. Both start_date and end_date should be in ISO-8601 format. If the claim was made on a single date rather than a date range, set the same date for both start_date and end_date. If date is unknown, return **NONE**.
+- Claim Source Text: List of **all** quotes from the original text that are relevant to the claim.
+
+Format each claim as (<subject_entity>{tuple_delimiter}<object_entity>{tuple_delimiter}<claim_type>{tuple_delimiter}<claim_status>{tuple_delimiter}<claim_start_date>{tuple_delimiter}<claim_end_date>{tuple_delimiter}<claim_description>{tuple_delimiter}<claim_source>)
+
+3. Return output in English as a single list of all the claims identified in steps 1 and 2. Use **{record_delimiter}** as the list delimiter.
+
+4. When finished, output {completion_delimiter}
+
+
+-Examples-
+Example 01:
+Entity specification: organization, person, government_agency, undocumented_non-citizen, driver, routes, means_of_transportation, means_of_communication, fees, nationality
+Claim description: multi-layered smuggling operations involving various entities and activities
+Text: On 2024/03/15, the Falcon Smuggling Network orchestrated a large-scale operation involving the illegal transportation of undocumented non-citizens from Central America to the United States. The group, led by Carlos Mendez, used desert routes and concealed trucks to avoid detection. Javier Morales, a driver for the network, was caught coordinating pickups via encrypted phone calls. Authorities from the Federal Migration Agency intercepted communications and discovered the group charging $5,000 per migrant for the transport. Mexican nationals were among those transported during the operation.
+Output:
+(FALCON SMUGGLING NETWORK{tuple_delimiter}CARLOS MENDEZ{tuple_delimiter}LEADERSHIP IN SMUGGLING NETWORK{tuple_delimiter}CONFIRMED{tuple_delimiter}2023-01-01T00:00:00{tuple_delimiter}2024-03-15T00:00:00{tuple_delimiter}Carlos Mendez was confirmed as the leader orchestrating smuggling operations for the Falcon Smuggling Network{tuple_delimiter}On 2024/03/15, the network was led by Carlos Mendez in coordinating the smuggling of undocumented non-citizens.)
+{record_delimiter}
+(FALCON SMUGGLING NETWORK{tuple_delimiter}TRANSPORTATION METHODS{tuple_delimiter}USE OF TRANSPORTATION IN SMUGGLING{tuple_delimiter}TRUE{tuple_delimiter}2024-03-15T00:00:00{tuple_delimiter}2024-03-15T00:00:00{tuple_delimiter}The Falcon Smuggling Network used trucks with concealed compartments and desert routes to evade law enforcement{tuple_delimiter}Trucks and desert routes were identified as key methods during the operation.)
+{record_delimiter}
+(JAVIER MORALES{tuple_delimiter}NONE{tuple_delimiter}DRIVER INVOLVEMENT IN SMUGGLING OPERATIONS{tuple_delimiter}TRUE{tuple_delimiter}2024-03-15T00:00:00{tuple_delimiter}2024-03-15T00:00:00{tuple_delimiter}Javier Morales was confirmed as a driver coordinating pickups for the Falcon Smuggling Network{tuple_delimiter}On 2024/03/15, Morales coordinated smuggling activities via encrypted phone calls.)
+{record_delimiter}
+(FALCON SMUGGLING NETWORK{tuple_delimiter}PHONE CALLS{tuple_delimiter}COMMUNICATION LEADING TO CRACKDOWN{tuple_delimiter}TRUE{tuple_delimiter}2024-03-15T00:00:00{tuple_delimiter}2024-03-15T00:00:00{tuple_delimiter}Encrypted phone calls were intercepted by the Federal Migration Agency, leading to a successful crackdown{tuple_delimiter}Authorities intercepted calls between the syndicate and its drivers on 2024/03/15.)
+{record_delimiter}
+(FALCON SMUGGLING NETWORK{tuple_delimiter}5000 USD{tuple_delimiter}FEES FOR ILLEGAL TRANSPORTATION{tuple_delimiter}TRUE{tuple_delimiter}2024-03-15T00:00:00{tuple_delimiter}2024-03-15T00:00:00{tuple_delimiter}The Falcon Smuggling Network charged $5,000 per migrant to transport undocumented non-citizens across borders{tuple_delimiter}On 2024/03/15, authorities discovered the network’s pricing for smuggling operations.)
+{record_delimiter}
+(FALCON SMUGGLING NETWORK{tuple_delimiter}MEXICAN NATIONALS{tuple_delimiter}SMUGGLING OF NATIONALITIES{tuple_delimiter}TRUE{tuple_delimiter}2024-03-15T00:00:00{tuple_delimiter}2024-03-15T00:00:00{tuple_delimiter}Mexican nationals were among the undocumented non-citizens transported during the operation{tuple_delimiter}On 2024/03/15, Mexican nationals were smuggled across borders.)
+{completion_delimiter}
+
+######################
+Example 02:
+Entity specification: organization, person, government_agency, drugs, arms, smuggled_items, driver, migrant, location, means_of_transportation, means_of_communication, fees
+Claim description: multi-faceted smuggling operation involving drugs, arms, migrants, and corrupted authorities across multiple locations
+Text:
+On 2024/06/20, authorities uncovered a large-scale operation by the Shadow Syndicate, led by Officer Jorge Martinez, who collaborated with the Border Control Agency to bypass checkpoints. The operation involved smuggling undocumented migrants from Honduras to the United States using desert routes and stash houses in El Paso, Texas. Firearms, rare gemstones, and narcotics, including heroin and fentanyl, were concealed in truck compartments. Javier Morales, a driver for the syndicate, coordinated the transportation through encrypted messaging apps. The syndicate charged $5,000 per migrant to facilitate the crossings.
+Output:
+(SHADOW SYNDICATE{tuple_delimiter}JORGE MARTINEZ{tuple_delimiter}INVOLVEMENT OF CORRUPTED AUTHORITY IN SMUGGLING{tuple_delimiter}TRUE{tuple_delimiter}2024-06-20T00:00:00{tuple_delimiter}2024-06-20T00:00:00{tuple_delimiter}Officer Jorge Martinez collaborated with the Shadow Syndicate to facilitate smuggling operations{tuple_delimiter}On 2024/06/20, Jorge Martinez helped the syndicate bypass checkpoints while smuggling migrants and contraband.)
+{record_delimiter}
+(SHADOW SYNDICATE{tuple_delimiter}HONDURAS{tuple_delimiter}UNITED STATES{tuple_delimiter}SMUGGLING OPERATIONS BETWEEN MULTIPLE LOCATIONS{tuple_delimiter}TRUE{tuple_delimiter}2024-06-20T00:00:00{tuple_delimiter}2024-06-20T00:00:00{tuple_delimiter}The Shadow Syndicate operated smuggling routes from Honduras to the U.S.{tuple_delimiter}On 2024/06/20, migrants were transported across borders using desert routes and stash houses.)
+{record_delimiter}
+(SHADOW SYNDICATE{tuple_delimiter}TRUCKS AND DESERT ROUTES{tuple_delimiter}USE OF TRANSPORTATION AND ROUTES IN SMUGGLING{tuple_delimiter}TRUE{tuple_delimiter}2024-06-20T00:00:00{tuple_delimiter}2024-06-20T00:00:00{tuple_delimiter}The Shadow Syndicate used trucks with hidden compartments and desert routes to evade detection during smuggling operations{tuple_delimiter}On 2024/06/20, authorities identified these methods as key to their smuggling operations.)
+{record_delimiter}
+(SHADOW SYNDICATE{tuple_delimiter}EL PASO STASH HOUSE{tuple_delimiter}USE OF STASH HOUSE IN SMUGGLING{tuple_delimiter}TRUE{tuple_delimiter}2024-06-20T00:00:00{tuple_delimiter}2024-06-20T00:00:00{tuple_delimiter}The stash house in El Paso was used to temporarily hold migrants and contraband before transportation{tuple_delimiter}On 2024/06/20, the syndicate used the location as a staging point for smuggling operations.)
+{record_delimiter}
+(SHADOW SYNDICATE{tuple_delimiter}COMMUNICATION AND COORDINATION{tuple_delimiter}USE OF ENCRYPTED MESSAGES AND DRIVERS{tuple_delimiter}TRUE{tuple_delimiter}2024-06-20T00:00:00{tuple_delimiter}2024-06-20T00:00:00{tuple_delimiter}Encrypted messaging apps and drivers like Javier Morales were used for coordination{tuple_delimiter}On 2024/06/20, authorities intercepted messages detailing smuggling activities.)
+{record_delimiter}
+(SHADOW SYNDICATE{tuple_delimiter}5000 USD{tuple_delimiter}FEES FOR ILLEGAL TRANSPORTATION{tuple_delimiter}TRUE{tuple_delimiter}2024-06-20T00:00:00{tuple_delimiter}2024-06-20T00:00:00{tuple_delimiter}The syndicate charged $5,000 per migrant for smuggling services{tuple_delimiter}On 2024/06/20, the pricing for smuggling operations was revealed.)
+{record_delimiter}
+(SHADOW SYNDICATE{tuple_delimiter}CONTRABAND{tuple_delimiter}NARCOTICS, ARMS, AND VALUABLES SMUGGLING{tuple_delimiter}TRUE{tuple_delimiter}2024-06-20T00:00:00{tuple_delimiter}2024-06-20T00:00:00{tuple_delimiter}The syndicate smuggled heroin, fentanyl, firearms, and rare gemstones concealed in trucks{tuple_delimiter}On 2024/06/20, authorities intercepted contraband hidden in truck compartments.)
+{completion_delimiter}
+
+
+-Real Data-
+Use the following input for your answer.
+Entity specification: {entity_specs}
+Claim description: {claim_description}
+Text: {input_text}
+Output:
+

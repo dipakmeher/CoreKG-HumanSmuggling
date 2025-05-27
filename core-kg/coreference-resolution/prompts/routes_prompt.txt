@@ -1,0 +1,74 @@
+- Goal -
+You are a highly precise and intelligent coreference resolution system tasked with resolving all references to route entities in legal text. Your job is to standardize route mentions by replacing abbreviations and variants with their full, consistent form, while strictly preserving the original structure and wording of the text. This task involves resolving all coreferences related to route mentions in the input document, following the Coreference Resolution Rules outlined below. The resulting text will be used to extract standardized route entities and relationships for knowledge graph construction and investigations related to human smuggling networks. Therefore, maintaining correctness, accuracy, and consistency is critical. You must not summarize, explain, or analyze the content. Only return the full, unaltered text with route-related coreferences resolved, following the rules below.
+
+This is an unsupervised coreference resolution task. The instructions below are intended to guide you in resolving route-related references. While examples are provided for learning, they do not cover all scenarios. You must infer and apply coreference resolution logic using contextual understanding, even when the structure or phrasing is unfamiliar.
+
+- Coreference Resolution Rules - Routes -
+
+1. Normalize Route Mentions:
+   - If a route is introduced with both a full name and abbreviation (e.g., Federal Route 1 ("FR-1"), State Route 86 ("SR-86")), replace all later references using the abbreviation (e.g., "FR-1", "SR-86") with the full standardized name (e.g., "Federal Route 1", "State Route 86").
+
+2. Corridor and Route Variants:
+   - If the route is referred to using a descriptor like "corridor" (e.g., "FR-1 corridor", "Federal Route 1 corridor"), normalize the phrase to use only the base route name (e.g., "Federal Route 1").
+   - This unifies variations like "FR-1", "FR-1 corridor", and "Federal Route 1 corridor" as a single consistent route mention.
+
+3. Hyphen Removal:
+   - Remove hyphens between the route prefix and number (e.g., convert "FR-1" to "FR 1" before normalization, if needed).
+
+4. Preserve Text Structure:
+   - Do not paraphrase, reword, or restructure any part of the text.
+   - Only replace abbreviated or inconsistent route mentions with the full standardized route name.
+
+
+
+####################
+=== EXAMPLES FOR LEARNING: ROUTE COREFERENCE RESOLUTION ===  
+Below are examples showing how to resolve references to route mentions in legal-style input, including abbreviations and corridor references.
+####################
+
+Example 01:  
+Input_text:  
+The stop occurred on Federal Route 1 ("FR-1") in southwestern Arizona. FR-1 runs through Gu Vo and Pia Oik. FR-1 dead-ends near the U.S.-Mexico border.  
+Output:  
+The stop occurred on Federal Route 1 ("FR-1") in southwestern Arizona. Federal Route 1 runs through Gu Vo and Pia Oik. Federal Route 1 dead-ends near the U.S.-Mexico border.
+
+--------------------
+
+Example 02:  
+Input_text:  
+State Route 83 ("SR-83") crosses multiple rural counties. SR-83 is often used by smugglers during late hours. A checkpoint was established along SR-83 in 2020.  
+Output:  
+State Route 83 ("SR-83") crosses multiple rural counties. State Route 83 is often used by smugglers during late hours. A checkpoint was established along State Route 83 in 2020.
+
+--------------------
+
+Example 03:  
+Input_text:  
+The vehicle was spotted entering Interstate 10 ("I-10") westbound. I-10 is a major corridor for cross-border traffic. The I-10 corridor has been under surveillance since 2021.  
+Output:  
+The vehicle was spotted entering Interstate 10 ("I-10") westbound. Interstate 10 is a major corridor for cross-border traffic. The Interstate 10 corridor has been under surveillance since 2021.
+
+
+####################
+=== INPUT TEXT ===  
+Below is a long document for which you must resolve all coreferences related to routes entity type only.
+
+Carefully read and process every sentence. Do not skip, trim, or ignore any part of the input — including introductory, descriptive, or concluding paragraphs.
+
+Apply coreference resolution consistently and thoroughly across the entire document, following the rules exactly as defined above.  
+If route-related coreferences are present and not resolved according to these rules, you are failing the task.  
+If no such coreferences exist in the input, return the original text exactly as it was received — without adding or removing anything.
+
+Return the full input text, preserving all original paragraph and sentence structure. Only replace vague or shortened references to route-related terms where applicable.
+
+Do not summarize, paraphrase, or reword any content.  
+Do not add any explanations, comments, or disclaimers — even if no changes are made.  
+Do not include statements like “no changes were needed,” “no coreference found,” or “I could not resolve.”  
+The output must contain only the final resolved text, and nothing else.
+####################
+Input_text: 
+
+{input_text}
+####################
+Output:
+

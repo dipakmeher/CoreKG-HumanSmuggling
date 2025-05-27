@@ -1,0 +1,81 @@
+
+-Goal-
+Given a text document that is potentially relevant to this activity and a list of entity types, identify all entities of those types from the text and all relationships among the identified entities.
+ 
+-Steps-
+1. Identify all entities. For each identified entity, extract the following information:
+- entity_name: Name of the entity, capitalized
+- entity_type: One of the following types: [{entity_types}]
+- entity_description: Comprehensive description of the entity's attributes and activities
+Format each entity as ("entity"{tuple_delimiter}<entity_name>{tuple_delimiter}<entity_type>{tuple_delimiter}<entity_description>)
+ 
+2. From the entities identified in step 1, identify all pairs of (source_entity, target_entity) that are *clearly related* to each other.
+For each pair of related entities, extract the following information:
+- source_entity: name of the source entity, as identified in step 1
+- target_entity: name of the target entity, as identified in step 1
+- relationship_description: explanation as to why you think the source entity and the target entity are related to each other
+- relationship_strength: a numeric score indicating strength of the relationship between the source entity and target entity
+ Format each relationship as ("relationship"{tuple_delimiter}<source_entity>{tuple_delimiter}<target_entity>{tuple_delimiter}<relationship_description>{tuple_delimiter}<relationship_strength>)
+ 
+3. Return output in English as a single list of all the entities and relationships identified in steps 1 and 2. Use **{record_delimiter}** as the list delimiter.
+ 
+4. When finished, output {completion_delimiter}
+
+######################
+-Examples-
+######################
+Example 1:
+Entity_types: ORGANIZATION, PERSON
+Text:
+The Red Cartel, an organized smuggling network, operates across several borders in South America. Maria Lopez, a key smuggler in the network, is responsible for coordinating movements through dangerous routes. The cartel recently organized a transfer involving migrants from Venezuela to Colombia.
+######################
+Output:
+("entity"{tuple_delimiter}RED CARTEL{tuple_delimiter}ORGANIZATION{tuple_delimiter}An organized smuggling network operating across borders in South America)
+{record_delimiter}
+("entity"{tuple_delimiter}MARIA LOPEZ{tuple_delimiter}PERSON{tuple_delimiter}A key smuggler coordinating movements for the Red Cartel)
+{record_delimiter}
+("relationship"{tuple_delimiter}MARIA LOPEZ{tuple_delimiter}RED CARTEL{tuple_delimiter}Maria Lopez plays a significant role in organizing the cartel's operations{tuple_delimiter}8)
+{completion_delimiter}
+
+######################
+Example 2:
+Entity_types: ORGANIZATION
+Text:
+The Phoenix Syndicate has been under investigation for orchestrating smuggling operations through the Darien Gap. The syndicate has used multiple transportation methods to transport migrants and contraband between Colombia and Panama.
+######################
+Output:
+("entity"{tuple_delimiter}PHOENIX SYNDICATE{tuple_delimiter}ORGANIZATION{tuple_delimiter}A smuggling network involved in operations across the Darien Gap)
+{record_delimiter}
+("relationship"{tuple_delimiter}PHOENIX SYNDICATE{tuple_delimiter}DARIEN GAP{tuple_delimiter}The syndicate frequently operates smuggling routes through the Darien Gap{tuple_delimiter}7)
+{completion_delimiter}
+
+######################
+Example 3:
+Entity_types: ORGANIZATION, PERSON, MEANS_OF_TRANSPORTATION
+Text:
+The Eagle Trafficking Ring relies heavily on trucks and boats to smuggle migrants across borders. Miguel Santos, a key driver in the operation, transports people hidden in truck compartments from the border to safe houses.
+######################
+Output:
+("entity"{tuple_delimiter}EAGLE TRAFFICKING RING{tuple_delimiter}ORGANIZATION{tuple_delimiter}An organization involved in human smuggling operations)
+{record_delimiter}
+("entity"{tuple_delimiter}MIGUEL SANTOS{tuple_delimiter}PERSON{tuple_delimiter}A driver working for the Eagle Trafficking Ring, transporting migrants)
+{record_delimiter}
+("entity"{tuple_delimiter}TRUCKS{tuple_delimiter}MEANS_OF_TRANSPORTATION{tuple_delimiter}Used to smuggle migrants across borders in hidden compartments)
+{record_delimiter}
+("entity"{tuple_delimiter}BOATS{tuple_delimiter}MEANS_OF_TRANSPORTATION{tuple_delimiter}Another transportation method used by the trafficking ring for cross-border movement)
+{record_delimiter}
+("relationship"{tuple_delimiter}EAGLE TRAFFICKING RING{tuple_delimiter}MIGUEL SANTOS{tuple_delimiter}Miguel Santos works as a driver for the Eagle Trafficking Ring{tuple_delimiter}8)
+{record_delimiter}
+("relationship"{tuple_delimiter}TRUCKS{tuple_delimiter}EAGLE TRAFFICKING RING{tuple_delimiter}The organization uses trucks to smuggle migrants in hidden compartments{tuple_delimiter}7)
+{completion_delimiter}
+
+
+######################
+-Real Data-
+######################
+Entity_types: {entity_types}
+Text: {input_text}
+######################
+Output:
+
+

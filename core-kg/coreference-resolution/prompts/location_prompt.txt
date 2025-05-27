@@ -1,0 +1,90 @@
+- Goal -
+You are a highly precise and intelligent coreference resolution system tasked with resolving all references to location entities in legal text. Your job is to standardize inconsistent location mentions by replacing all variations with a consistent "City, Full State Name" format, while strictly preserving the original structure and wording of the text. This task involves resolving all coreferences related to location mentions in the input document based on the Coreference Resolution Rules mentioned below. The resulting text will be used to extract standardized location entities and relationships for downstream analysis, including knowledge graph construction and investigations related to human smuggling networks. Therefore, maintaining correctness, accuracy, and consistency is critical.
+
+You must not summarize, explain, or analyze the content. Only return the full, unaltered text with location-related coreferences resolved, following the rules below.
+
+This is an unsupervised coreference resolution task. The instructions below are intended to guide you in resolving location-related references. While examples are provided for learning, they do not cover all scenarios. You must infer and apply coreference resolution logic using contextual understanding, even when the structure or phrasing is unfamiliar.
+
+
+- Coreference Resolution Rules - Locations -
+1. Normalize Location Names:
+   - If a location is mentioned in varying forms (e.g., "Laredo", "Laredo, TX", "Laredo, Texas"), standardize all instances to the format: City, Full State Name (e.g., "Laredo, Texas").
+
+2. Ensure Consistency:
+   - Use the standardized location format uniformly throughout the entire document, including within quotes or repeated references.
+
+3. Hyphenated or Embedded Mentions:
+   - If a location appears within a compound or hyphenated phrase (e.g., "Laredo-bound", "El Paso-connected"), extract and normalize the location part (e.g., "Laredo" to "Laredo, Texas") while preserving the rest of the phrase (e.g., "Laredo-bound" becomes "Laredo, Texas-bound").
+
+4. Do Not Alter Non-Location Words:
+   - Do not make changes to any part of the text other than the location name itself. Preserve sentence structure, wording, and formatting.
+5. Organization-Linked Location References:
+   - If a location mention includes or implies the name of an organization (e.g., "Company A facility", "XYZ Corp lot", "ABC warehouse", or "the organization’s premises"), and all such references clearly point to the same physical place, resolve them to a standardized form that includes:
+     - the full name of the organization (as introduced earlier in the text),
+     - the best known specific descriptor (e.g., street name, facility type), and
+     - the normalized “City, Full State Name” format.
+     Example: "XYZ Corp’s gravel lot", "XYZ warehouse", "open lot at XYZ" →  
+     "XYZ Corporation facility at [Location/Street], [City, Full State Name]"
+
+   - Generic descriptors like "open lot", "gravel lot", "cement lot", etc. should be resolved only if context confirms they refer to the same place as the organization’s known location. If context is unclear or if the term is used in contrast to another claim (e.g., a witness describes a different surface to dispute the defendant's claim), leave the term as-is.
+
+
+####################
+=== EXAMPLES FOR LEARNING: LOCATION COREFERENCE RESOLUTION ===  
+Below are examples showing how to resolve references to location mentions in legal-style input, including inconsistent formats and hyphenated phrases.
+####################
+
+Example 01:  
+Input_text:  
+The vehicle was last seen near Laredo. Officials confirmed it was found just outside Laredo, TX. One report mentioned Laredo, Texas, while others simply referred to Laredo.  
+Output:  
+The vehicle was last seen near Laredo, Texas. Officials confirmed it was found just outside Laredo, Texas. One report mentioned Laredo, Texas, while others simply referred to Laredo, Texas.
+
+--------------------
+
+Example 02:  
+Input_text:  
+Agents were monitoring El Paso-bound vehicles. An informant from El Paso later confirmed the route. The report listed El Paso, TX.  
+Output:  
+Agents were monitoring El Paso, Texas-bound vehicles. An informant from El Paso, Texas later confirmed the route. The report listed El Paso, Texas.
+
+--------------------
+
+Example 03:  
+Input_text:  
+Multiple sightings were recorded in McAllen—near the Hidalgo border. McAllen, TX, has seen increased traffic in recent weeks. The team returned to McAllen for further checks.  
+Output:  
+Multiple sightings were recorded in McAllen, Texas—near the Hidalgo border. McAllen, Texas has seen increased traffic in recent weeks. The team returned to McAllen, Texas for further checks.
+
+--------------------
+
+Example 04:
+Input_text:
+ABC Freight, Inc. owns a large lot on Elm Street. The open lot was used to store trailers. A witness said he entered the ABC lot through the back entrance. Another described it as a concrete lot.
+
+Output:
+ABC Freight, Inc. owns a large lot on Elm Street. The ABC Freight, Inc. facility at Elm Street, [City, Full State Name] was used to store trailers. A witness said he entered the ABC Freight, Inc. facility at Elm Street, [City, Full State Name] through the back entrance. Another described it as a concrete lot.
+
+####################
+=== INPUT TEXT ===  
+Below is a long document for which you must resolve all coreferences related to location entity type only.
+
+Carefully read and process every sentence. Do not skip, trim, or ignore any part of the input — including introductory, descriptive, or concluding paragraphs.
+
+Apply coreference resolution consistently and thoroughly across the entire document, following the rules exactly as defined above.  
+If location-related coreferences are present and not resolved according to these rules, you are failing the task.  
+If no such coreferences exist in the input, return the original text exactly as it was received — without adding or removing anything.
+
+Return the full input text, preserving all original paragraph and sentence structure. Only replace vague or shortened references to location-related entities where applicable.
+
+Do not summarize, paraphrase, or reword any content.  
+Do not add any explanations, comments, or disclaimers — even if no changes are made.  
+Do not include statements like “no changes were needed,” “no coreference found,” or “I could not resolve.”  
+The output must contain only the final resolved text, and nothing else.
+####################
+Input_text: 
+
+{input_text}
+####################
+Output:
+

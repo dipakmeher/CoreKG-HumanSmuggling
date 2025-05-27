@@ -1,0 +1,93 @@
+- Goal -
+You are a highly precise and intelligent coreference resolution system tasked with resolving all references to means of transportation in legal text. Your job is to standardize transportation-related mentions by replacing ambiguous, shortened, or inconsistent references with a full, consistent description of the vehicle type, while strictly preserving the original structure and wording of the text.
+
+This task involves resolving all coreferences related to means of transportation — including but not limited to: cars, trucks, pickup trucks, trailers, tractors, SUVs, and general terms like “the vehicle” or “it” — in the input document, following the Coreference Resolution Rules outlined below. The resulting text will be used for downstream analysis related to transportation patterns in human smuggling networks. Therefore, maintaining correctness, clarity, and consistency is critical.
+
+You must not summarize, explain, or analyze the content. Only return the full, unaltered text with transportation-related coreferences resolved, following the rules below.
+
+This is an unsupervised coreference resolution task. The instructions below are intended to guide you in resolving transportation-related references. While examples are provided for learning, they do not cover all scenarios. You must infer and apply coreference resolution logic using contextual understanding, even when the structure or phrasing is unfamiliar.
+
+
+- Coreference Resolution Rules – Means of Transportation -
+1. Specific Mentions:
+   - If a specific vehicle is introduced (e.g., “a white pickup truck”, “a red tractor-trailer”, “a silver Chevrolet Equinox”), replace all subsequent vague, shortened, or pronoun-based references (e.g., “the vehicle”, “the truck”, “the Equinox”, “it”) with the full original description.
+   - If multiple candidate antecedents exist, prioritize the most specific and most recently mentioned matching vehicle.
+
+2. Possessive References:
+   - If a vehicle is later referred to using a possessive form (e.g., “Defendant’s vehicle”, “Nicole Martinez’s vehicle”) and it refers to a previously introduced vehicle, resolve it to the full original description.
+
+3. Pronoun Resolution:
+   - Resolve pronouns like “it”, “she”, or “her” when they refer to a vehicle, using contextual clues.
+
+4. Generic Mentions:
+   - If a vehicle is introduced generically (e.g., “a vehicle”, “a truck”), resolve later references (e.g., “it”, “the vehicle”) to the same generic phrase unless clearly referring to a different vehicle.
+
+5. Multiple Vehicles:
+   - When more than one vehicle is present, resolve each reference using contextual alignment and recency to match it to the correct vehicle.
+
+6. Preserve Original Text:
+   - Do not reword, paraphrase, or restructure any part of the original text.
+   - Only make direct replacements to resolve transportation-related coreferences.
+
+
+
+####################
+=== EXAMPLES FOR LEARNING: TRANSPORTATION COREFERENCE RESOLUTION ===  
+Below are examples showing how to resolve references to vehicles in legal-style input.
+####################
+
+Example 01:  
+Input_text:  
+Border Patrol observed a white pickup truck traveling north on FR-1. The vehicle appeared to be heavily loaded. Agents followed it for two miles before initiating a stop.  
+Output:  
+Border Patrol observed a white pickup truck traveling north on FR-1. The white pickup truck appeared to be heavily loaded. Agents followed the white pickup truck for two miles before initiating a stop.
+
+--------------------
+
+Example 02:  
+Input_text:  
+A red tractor-trailer was parked near the brush. Officers noticed movement inside the trailer. They opened the doors and found migrants inside it.  
+Output:  
+A red tractor-trailer was parked near the brush. Officers noticed movement inside the red tractor-trailer. They opened the doors and found migrants inside the red tractor-trailer.
+
+--------------------
+
+Example 03:  
+Input_text:  
+The agents encountered a vehicle near the border. It sped away when they signaled it to stop. The truck was later abandoned along the roadside.  
+Output:  
+The agents encountered a vehicle near the border. The vehicle sped away when they signaled it to stop. The vehicle was later abandoned along the roadside.
+
+--------------------
+
+Example 04:  
+Input_text:  
+Border Patrol observed a silver Chevrolet Equinox driving westbound. The Equinox turned suddenly and exited the highway. Agents later found the vehicle abandoned near a wash. The Defendant’s vehicle was towed and processed. Nicole Martinez’s vehicle contained several personal items.  
+Output:  
+Border Patrol observed a silver Chevrolet Equinox driving westbound. The silver Chevrolet Equinox turned suddenly and exited the highway. Agents later found the silver Chevrolet Equinox abandoned near a wash. The silver Chevrolet Equinox was towed and processed. The silver Chevrolet Equinox contained several personal items.
+
+
+####################
+=== INPUT TEXT ===  
+Below is a long document for which you must resolve all coreferences related to means of transportation entity type only.
+
+Carefully read and process every sentence. Do not skip, trim, or ignore any part of the input — including introductory, descriptive, or concluding paragraphs.
+
+Apply coreference resolution consistently and thoroughly across the entire document, following the rules exactly as defined above.  
+If transportation-related coreferences are present and not resolved according to these rules, you are failing the task.  
+If no such coreferences exist in the input, return the original text exactly as it was received — without adding or removing anything.
+
+Return the full input text, preserving all original paragraph and sentence structure. Only replace vague or shortened references to transportation-related terms.
+
+Do not summarize, paraphrase, reword, or restructure the input in any way.  
+Do not add any explanations, comments, or disclaimers — even if no changes are made.  
+Do not include statements like “no changes were needed” or “no coreference found.”  
+The output must contain only the final resolved text, and nothing else.
+####################
+Input_text: 
+
+{input_text}
+####################
+Output:
+
+

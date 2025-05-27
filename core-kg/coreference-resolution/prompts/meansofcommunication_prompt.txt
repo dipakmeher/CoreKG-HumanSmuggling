@@ -1,0 +1,95 @@
+- Goal -
+You are a highly precise and intelligent coreference resolution system designed to support named entity recognition (NER) and knowledge graph construction. Your task is to resolve all coreferences related to the "Means of Communication" entity type in the given input text. This includes unifying variations such as "the phone", "his cellphone", or "the communication device" that refer to the same underlying object. The output will be used to extract standardized communication entity mentions and link them to individuals and events in human smuggling network investigations. Therefore, correctness, accuracy, and consistency are critical.
+
+Do not summarize, explain, paraphrase, or reword any content. Do not add explanations, comments, disclaimers, or meta-statements — even if no changes are made. Return only the full, unaltered input text with applicable coreference replacements.
+
+This is an unsupervised coreference resolution task. The instructions below guide the resolution of communication-related references. While examples are provided, they do not cover all scenarios — you must infer and apply resolution logic using contextual understanding.
+
+- Coreference Resolution Rules – Means of Communication -
+
+1. Full Name Consistency
+   - Once introduced with a descriptive phrase (e.g., "a prepaid cellphone", "a satellite phone"), all later references (e.g., "the phone", "the device", "it") should resolve back to the full phrase.
+
+2. Role-based or Possessive References
+   - Mentions like "his phone", "the smuggler's device" must retain possessive context and resolve back to the original descriptive phrase.
+     Example: "his phone" : "his prepaid cellphone"
+
+3. Synonyms and Device Variants
+   - Resolve terms like "mobile", "cell", "device", "handset", or "burner" back to the specific original phrase they refer to. Do not simplify.
+
+4. One-to-One Linking
+   - Only resolve coreferences when it’s clear they refer to the same object. Do not merge references to different communication devices.
+
+5. Application and Service Mentions
+   - Mentions like "the messaging app", "chat application" must resolve back to specific terms if introduced earlier (e.g., "the WhatsApp account").
+
+6. General vs. Specific
+   - If a general term ("a phone") is later clarified ("a prepaid burner phone"), resolve earlier references to the more specific term.
+
+7. Maintain Original Mentions
+   - Do not alter the first mention of any communication method. Only resolve later references.
+
+8. Avoid Over-resolution
+   - If it’s unclear whether a vague reference ("the phone", "it") refers to a previously introduced device, leave it unchanged.
+
+9. Device vs. Number vs. Event
+   - Do not conflate terms like "phone", "phone number", and "phone call" unless context confirms they refer to the same object. Resolve each to its precise referent:
+     - "phone" : device
+     - "phone number" : contact detail
+     - "phone call" : communication event
+
+####################
+=== EXAMPLES FOR LEARNING: MEANS OF COMMUNICATION COREFERENCE RESOLUTION ===
+####################
+
+Example 01
+Input_text:
+The agent seized a prepaid cellphone from the suspect. The phone contained several smuggling-related contacts. It was later logged into evidence.
+
+Output:
+The agent seized a prepaid cellphone from the suspect. The prepaid cellphone contained several smuggling-related contacts. The prepaid cellphone was later logged into evidence.
+
+--------------------
+
+Example 02
+Input_text:
+Officers discovered a WhatsApp account used to coordinate pickup locations. Messages from the messaging app revealed detailed route plans.
+
+Output:
+Officers discovered a WhatsApp account used to coordinate pickup locations. Messages from the WhatsApp account revealed detailed route plans.
+
+--------------------
+
+Example 03
+Input_text:
+Authorities found a satellite phone in the cab. The driver claimed the device was only used for emergencies. They later learned the phone was linked to a cartel.
+
+Output:
+Authorities found a satellite phone in the cab. The driver claimed the satellite phone was only used for emergencies. They later learned the satellite phone was linked to a cartel.
+
+--------------------
+
+Example 04
+Input_text:
+The smuggler used a phone to place a call. Investigators traced the phone number to a cartel-linked account. The phone call helped agents triangulate the safe house.
+
+Output:
+The smuggler used a phone to place a call. Investigators traced the phone number to a cartel-linked account. The phone call helped agents triangulate the safe house.
+
+(Note: Each term — "phone", "phone number", "phone call" — is distinct and correctly preserved.)
+
+####################
+=== INPUT TEXT ===
+You will now be given a long document for which you must resolve all coreferences related to the Means of Communication entity type only.
+
+Carefully read and process every sentence. Apply coreference resolution consistently and thoroughly, following the above rules. If coreferences are present but not resolved, the task is considered failed. If no communication-related coreferences exist, return the input text exactly as it was received — without trimming, skipping, or modifying any part.
+
+Do not include any meta-output such as "no coreferences found" or "no changes were needed." Return only the final resolved text, preserving paragraph and sentence structure. Replace vague references only where applicable.
+
+####################
+Input_text:
+
+{input_text}
+
+####################
+Output:
