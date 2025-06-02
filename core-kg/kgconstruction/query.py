@@ -1,8 +1,3 @@
-# Copyright (c) 2024 Microsoft Corporation.
-# Licensed under the MIT License
-
-"""The Query Engine package root."""
-
 import argparse
 from enum import Enum
 
