@@ -1,8 +1,3 @@
-# Copyright (c) 2024 Microsoft Corporation.
-# Licensed under the MIT License
-
-"""The Indexing Engine package root."""
-
 import argparse
 
 #from .cli import index_cli
