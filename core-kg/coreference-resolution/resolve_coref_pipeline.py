@@ -1,3 +1,14 @@
+"""
+resolve_coref_pipeline.py
+
+This script performs sequential, type-aware coreference resolution using a locally served LLM via Ollama.
+It takes an input legal text file and processes it with entity-type-specific prompts to resolve references
+for key entity types such as person, routes, location, means of transportation, means of communication, organization, and smuggled items.
+
+The output is a resolved legal text file with coreferences replaced appropriately. 
+The script includes retry mechanisms to ensure robustness against malformed model outputs.
+"""
+
 import os
 import requests
 import time
@@ -5,6 +16,12 @@ import argparse
 
 # ==== ARGUMENT PARSING ====
 def parse_arguments():
+    """
+    Parses command-line arguments for running the coreference resolution pipeline.
+
+    Returns:
+        argparse.Namespace: Parsed arguments including input/output paths and prompt files.
+    """
     parser = argparse.ArgumentParser(description="Run coreference resolution using Ollama model.")
 
     parser.add_argument("--input-file", required=True, help="Path to a single input text file.")
@@ -44,6 +61,17 @@ def save_text(file_path, content):
         f.write(content)
 
 def call_ollama_api(prompt, model):
+    """
+    Sends a prompt to a locally served Ollama LLM and returns the model's response.
+
+    Args:
+        prompt (str): The input prompt to send to the model.
+        model (str): The name of the model to query via the Ollama API.
+
+    Returns:
+        str: The model's response text if successful, or an error message otherwise.
+    """
+    
     host = os.environ.get("OLLAMA_HOST", "127.0.0.1:11434")
     api_url = f"http://{host}/api/generate"
 
@@ -60,7 +88,25 @@ def call_ollama_api(prompt, model):
 
 # ==== MAIN PROCESS ====
 def process_file(input_file, output_root, prompt_paths, retries_map, model_name):
+    """
+    Executes the sequential coreference resolution pipeline on a single input file.
 
+    This function applies type-specific prompts in a fixed order to perform multi-stage 
+    coreference resolution using a locally served LLM. Each stage updates the text based 
+    on the previous output, and the final resolved text is saved.
+
+    Args:
+        input_file (str): Path to the raw input legal text file.
+        output_root (str): Root directory to store intermediate and final outputs.
+        prompt_paths (dict): Mapping of entity types to their corresponding prompt file paths.
+        retries_map (dict): Mapping of entity types to the number of retry attempts.
+        model_name (str): Name of the Ollama model used for inference.
+
+    Raises:
+        RuntimeError: If a required prompt is missing or model call fails after retries.
+        FileNotFoundError: If a specified prompt file does not exist.
+    """
+    
     start_time = time.time()
     input_filename = os.path.basename(input_file)
     input_base = os.path.splitext(input_filename)[0]
@@ -128,6 +174,7 @@ def process_file(input_file, output_root, prompt_paths, retries_map, model_name)
 
 # ==== ENTRY POINT ====
 if __name__ == "__main__":
+    # Entry point: parses arguments, registers prompt configurations, and initiates the resolution pipeline.
     args = parse_arguments()
 
     prompt_paths = {}
