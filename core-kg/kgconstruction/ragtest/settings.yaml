@@ -1,3 +1,14 @@
+# Configuration file for the GraphRAG baseline.
+#
+# This file defines all major settings used across the pipeline, including:
+# model selection for both generation and embedding, prompt paths,
+# chunking strategy, input/output handling, caching, and parallel execution settings.
+#
+# It also includes task-specific configurations such as entity extraction,
+# claim extraction, summarization, community report generation, and graph construction.
+#
+# Each section may override global defaults (e.g., LLM settings, async mode, parallelism)
+# to support fine-tuned control over pipeline behavior.
 
 encoding_model: cl100k_base
 skip_workflows: []
