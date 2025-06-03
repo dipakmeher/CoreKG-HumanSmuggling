@@ -1,3 +1,10 @@
+"""
+Entry point for executing local or global search over community reports using the GraphRAG query engine.
+
+Supports configurable options for data paths, query type, community level, and response format.
+Custom embedding and search behavior is enabled via runtime method replacement using locally served LLMs.
+"""
+
 import argparse
 from enum import Enum
 
