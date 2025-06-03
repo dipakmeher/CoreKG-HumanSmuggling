@@ -1,6 +1,7 @@
+# CLI entry point for executing the GraphRAG pipeline with various configuration and runtime options.
+
 import argparse
 
-#from .cli import index_cli
 from graphrag.index.cli import index_cli
 from monkey_patch import patch_openai_embeddings_llm
 patch_openai_embeddings_llm()
