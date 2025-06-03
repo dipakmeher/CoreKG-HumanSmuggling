@@ -35,7 +35,8 @@ python resolve_coref_pipeline.py \
   --model <model_name_in_ollama>
 ```
 
-All the required prompts are present in the core-kg/prompts/ folder.
+#### CORE-KG Prompts
+All the required prompts for CORE-KG are present in the `core-kg/prompts/` folder.
 
 ### 2. Run KG Construction and Baseline (GraphRAG)
 
@@ -48,7 +49,8 @@ python index.py --root ./ragtest
 Make sure you are in the correct directory. Follow the full setup and usage instructions provided here:  
 [https://github.com/microsoft/graphrag](https://github.com/microsoft/graphrag)
 
-All the required prompts are present in the baseline/ragtest/prompts/ folder.
+#### Baseline (GraphRAG) Prompts
+All the required prompts for the baseline model are present in the `baseline/ragtest/prompts/` folder.
 
 
 ## Conclusion
