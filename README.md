@@ -36,7 +36,11 @@ python resolve_coref_pipeline.py \
 ```
 
 #### CORE-KG Prompts
-All the required prompts for CORE-KG are present in the `core-kg/prompts/` folder.
+##### Coreference Resolution Prompts
+All the required prompts for coreference resolution are present in the `core-kg/coreference-resolution/prompts/` folder.
+
+##### KG Construction Prompts
+All the required prompts for KG construction are present in the `core-kg/kgconstruction/ragtest/prompts/` folder.
 
 ### 2. Run KG Construction and Baseline (GraphRAG)
 
