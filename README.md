@@ -35,6 +35,8 @@ python resolve_coref_pipeline.py \
   --model <model_name_in_ollama>
 ```
 
+All the required prompts are present in the core-kg/prompts/ folder.
+
 ### 2. Run KG Construction and Baseline (GraphRAG)
 
 The primary file for running the KG construction module and the baseline is `index.py`. Use the command below:
@@ -45,6 +47,8 @@ python index.py --root ./ragtest
 
 Make sure you are in the correct directory. Follow the full setup and usage instructions provided here:  
 [https://github.com/microsoft/graphrag](https://github.com/microsoft/graphrag)
+
+All the required prompts are present in the baseline/ragtest/prompts/ folder.
 
 
 ## Conclusion
